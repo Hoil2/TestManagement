@@ -1,0 +1,60 @@
+package com.java.DB;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class TestSubmittedAnswersDAO {
+	static String driver = "org.mariadb.jdbc.Driver";
+	static String url = "jdbc:mariadb://localhost:3306/testmanagement";
+	static String uid = "root";
+	static String pwd = "1234";
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	Statement stmt = null; 
+	ResultSet rs = null;
+	
+	private String query = null;
+	
+	public TestSubmittedAnswersDAO() {
+		try {
+			Class.forName(driver);	
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void insertAnswers(ArrayList<String> answers, int test_num) {
+		query = "insert into test_submitted_answers values(LAST_INSERT_ID(),?)";
+		
+		try {
+			con = DriverManager.getConnection(url, uid, pwd);
+			for(int i = 0; i < answers.size(); i++) {
+				
+				pstmt = con.prepareStatement(query);
+				
+				pstmt.setString(1, answers.get(i));
+				
+				pstmt.executeUpdate();
+			}
+			System.out.println("insert user answer");
+		} catch(SQLException ex) {
+			System.out.println("접속 실패");
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}

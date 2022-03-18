@@ -1,0 +1,92 @@
+package com.java.DB;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class TestRecordDAO {
+	static String driver = "org.mariadb.jdbc.Driver";
+	static String url = "jdbc:mariadb://localhost:3306/testmanagement";
+	static String uid = "root";
+	static String pwd = "1234";
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	Statement stmt = null; 
+	ResultSet rs = null;
+	
+	private String query = null;
+	
+	public TestRecordDAO() {
+		try {
+			Class.forName(driver);	
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public TestRecordDTO selectTestRecord(String m_id) {
+		query = "select * from test_record where m_id='"+m_id+"'";
+		TestRecordDTO dto = new TestRecordDTO();
+		try {
+			con = DriverManager.getConnection(url, uid, pwd);
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			
+			rs.next();
+			
+			int test_num = rs.getInt("test_num");
+			int test_id = rs.getInt("test_id");
+			Object datetime = rs.getObject("submit_datetime");
+			int score = rs.getInt("score");
+			
+			dto = new TestRecordDTO(test_num, test_id, m_id, datetime, score);
+		} catch(SQLException ex) {
+			System.out.println("접속 실패");
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dto;
+	}
+	
+	public ArrayList<TestRecordDTO> selectUserTestRecord() {
+		
+	}
+	
+	public void submitTest(TestRecordDTO dto) {
+		query = "insert into test_record(test_id, m_id, submit_datetime, score) value(?,?,?,?)";
+		
+		try {
+			con = DriverManager.getConnection(url, uid, pwd);
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setInt(1, dto.getTest_id());
+			pstmt.setString(2, dto.getM_id());
+			pstmt.setObject(3, dto.getSubmit_datetime());
+			pstmt.setInt(4, dto.getScore());
+			
+			pstmt.executeUpdate();
+			System.out.println("시험지 제출 성공");
+		} catch(SQLException ex) {
+			System.out.println("접속 실패");
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				if (con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

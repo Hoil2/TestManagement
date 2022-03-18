@@ -1,0 +1,49 @@
+package com.java.DB;
+
+public class TestSubmittedAnswerDTO {
+	private int test_num;
+	private String user_answer;
+	private int q_form;
+	private int q_score;
+	private String q_answer;
+	
+	public TestSubmittedAnswerDTO(int test_num, String user_answer, int q_form, int q_score, String q_answer) {
+		this.test_num = test_num;
+		this.user_answer = user_answer;
+		this.q_form = q_form;
+		this.q_score = q_score;
+		this.q_answer = q_answer;
+	}
+	public int getTest_num() {
+		return test_num;
+	}
+	public void setTest_num(int test_num) {
+		this.test_num = test_num;
+	}
+	public String getUser_answer() {
+		return user_answer;
+	}
+	public void setUser_answer(String user_answer) {
+		this.user_answer = user_answer;
+	}
+	public int getQ_form() {
+		return q_form;
+	}
+	public void setQ_form(int q_form) {
+		this.q_form = q_form;
+	}
+	public int getQ_score() {
+		return q_score;
+	}
+	public void setQ_score(int q_score) {
+		this.q_score = q_score;
+	}
+	public String getQ_answer() {
+		return q_answer;
+	}
+	public void setQ_answer(String q_answer) {
+		this.q_answer = q_answer;
+	}
+	
+	
+}

@@ -1,0 +1,9 @@
+package com.java.DB;
+
+public class TestSubmittedAnswerDTO {
+	private int test_num;
+	private int user_answer;
+	private int q_form;
+	private int q_score;
+	private int q_answer;
+}
